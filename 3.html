@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Study Smart — States of Matter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0F151C;
+    --panel:#182029;
+    --panel-2:#1F2933;
+    --line:#2A3540;
+    --gold:#E3A857;
+    --teal:#5FBFB3;
+    --text:#ECEEF1;
+    --muted:#8B96A5;
+    --good:#6FCB8E;
+    --bad:#D9707A;
+    --radius:10px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(1200px 600px at 15% -10%, rgba(95,191,179,0.08), transparent 60%),
+      radial-gradient(900px 500px at 100% 0%, rgba(227,168,87,0.07), transparent 55%),
+      var(--ink);
+    color:var(--text);
+    font-family:'IBM Plex Sans', sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  .wrap{max-width:1100px;margin:0 auto;padding:28px 20px 60px;}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+    padding:34px 28px 26px;
+    overflow:hidden;
+    margin-bottom:22px;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--teal);
+    margin:0 0 10px;
+  }
+  h1.title{
+    font-family:'Fraunces', serif;
+    font-weight:700;
+    font-size:clamp(34px,6vw,54px);
+    line-height:1.02;
+    margin:0 0 8px;
+    letter-spacing:-.01em;
+  }
+  h1.title em{
+    font-style:italic;
+    font-weight:400;
+    color:var(--gold);
+  }
+  .hero-sub{
+    color:var(--muted);
+    font-size:14.5px;
+    max-width:520px;
+    line-height:1.5;
+    margin:0;
+  }
+  .hero-curve{
+    position:absolute;
+    right:-10px; top:-10px;
+    width:280px; height:200px;
+    opacity:.9;
+    pointer-events:none;
+  }
+  @media (max-width:640px){ .hero-curve{ display:none; } }
+
+  /* ---------- NAV ---------- */
+  nav.tabs{
+    display:flex;
+    gap:4px;
+    overflow-x:auto;
+    border-bottom:1px solid var(--line);
+    margin-bottom:24px;
+    padding-bottom:0;
+  }
+  nav.tabs button{
+    flex:0 0 auto;
+    background:none;
+    border:none;
+    color:var(--muted);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px;
+    letter-spacing:.04em;
+    padding:11px 16px;
+    cursor:pointer;
+    position:relative;
+    white-space:nowrap;
+  }
+  nav.tabs button .n{ color:var(--gold); margin-right:6px; }
+  nav.tabs button.active{ color:var(--text); }
+  nav.tabs button.active::after{
+    content:"";
+    position:absolute;
+    left:10px; right:10px; bottom:-1px;
+    height:2px;
+    background:linear-gradient(90deg, var(--teal), var(--gold));
+    border-radius:2px;
+  }
+
+  section.panel{ display:none; animation:fade .35s ease; }
+  section.panel.active{ display:block; }
+  @keyframes fade{ from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:none;} }
+
+  h2.sec-title{
+    font-family:'Fraunces', serif;
+    font-size:22px;
+    font-weight:600;
+    margin:0 0 4px;
+  }
+  p.sec-desc{ color:var(--muted); font-size:13.5px; margin:0 0 20px; max-width:640px; line-height:1.5;}
+
+  /* ---------- OVERVIEW ---------- */
+  .law-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+    gap:14px;
+  }
+  .law-card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:16px 16px 14px;
+    border-left:3px solid var(--teal);
+  }
+  .law-card.gold{ border-left-color:var(--gold); }
+  .law-card h3{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--teal);
+    margin:0 0 8px;
+  }
+  .law-card.gold h3{ color:var(--gold); }
+  .law-card .formula{
+    font-family:'Fraunces', serif;
+    font-size:20px;
+    margin:0 0 6px;
+  }
+  .law-card p{ font-size:13px; color:var(--text); line-height:1.5; margin:0; opacity:.9;}
+
+  /* ---------- DIAGRAMS ---------- */
+  .diagram-block{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:18px;
+    margin-bottom:20px;
+  }
+  .diagram-block h3{
+    font-family:'Fraunces', serif;
+    font-size:17px;
+    margin:0 0 3px;
+  }
+  .diagram-block .hint{ font-size:12px; color:var(--muted); margin:0 0 14px; }
+  .diagram-flex{ display:flex; gap:18px; flex-wrap:wrap; align-items:flex-start; }
+  .diagram-flex svg{ flex:0 0 auto; max-width:100%; }
+  .info-box{
+    flex:1 1 220px;
+    min-width:220px;
+    background:var(--panel-2);
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:14px;
+    font-size:13px;
+    line-height:1.55;
+    color:var(--text);
+    min-height:96px;
+  }
+  .info-box .tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    color:var(--gold);
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    display:block;
+    margin-bottom:6px;
+  }
+  .zone{ cursor:pointer; transition:opacity .15s; }
+  .zone:hover{ opacity:.75; }
+  .zone.selected{ stroke:var(--gold); stroke-width:2; }
+
+  .calc-row{ display:flex; gap:16px; flex-wrap:wrap; align-items:center; margin-bottom:14px;}
+  .calc-row label{ font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--muted); display:block; margin-bottom:4px;}
+  .calc-row input[type=number]{
+    width:70px; background:var(--panel-2); border:1px solid var(--line); color:var(--text);
+    border-radius:6px; padding:6px 8px; font-family:'IBM Plex Mono', monospace; font-size:14px;
+  }
+  .calc-out{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:14px;
+    background:var(--panel-2);
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:12px 16px;
+    display:inline-block;
+  }
+  .calc-out b{ color:var(--gold); font-size:18px; }
+  .calc-out .verdict{ color:var(--teal); }
+
+  input[type=range]{ width:100%; accent-color:var(--gold); }
+
+  /* ---------- MINI MAP ---------- */
+  .mm-wrap{ display:flex; gap:18px; flex-wrap:wrap; }
+  .mm-list{
+    flex:1 1 260px;
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+    max-width:340px;
+  }
+  .mm-list button{
+    text-align:left;
+    background:var(--panel);
+    border:1px solid var(--line);
+    color:var(--text);
+    padding:12px 14px;
+    border-radius:8px;
+    cursor:pointer;
+    font-family:'IBM Plex Sans', sans-serif;
+    font-size:13.5px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+  .mm-list button .arrow{ color:var(--muted); font-family:'IBM Plex Mono', monospace; }
+  .mm-list button.active{ border-color:var(--gold); background:var(--panel-2); }
+  .mm-list button.active .arrow{ color:var(--gold); }
+  .mm-reader{
+    flex:1 1 320px;
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:20px;
+    min-height:260px;
+    font-size:14px;
+    line-height:1.65;
+  }
+  .mm-reader .tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:var(--teal);
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    display:block;
+    margin-bottom:10px;
+  }
+  .mm-reader h4{ font-family:'Fraunces', serif; font-size:19px; margin:0 0 10px; }
+  .mm-empty{ color:var(--muted); font-size:13px; }
+
+  /* ---------- FLASH CARDS ---------- */
+  .fc-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+    gap:14px;
+  }
+  .fc{
+    perspective:1000px;
+    height:150px;
+    cursor:pointer;
+  }
+  .fc-inner{
+    position:relative; width:100%; height:100%;
+    transition:transform .5s;
+    transform-style:preserve-3d;
+  }
+  .fc.flipped .fc-inner{ transform:rotateY(180deg); }
+  .fc-face{
+    position:absolute; inset:0;
+    backface-visibility:hidden;
+    border-radius:10px;
+    border:1px solid var(--line);
+    padding:16px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    font-size:14px;
+    line-height:1.4;
+  }
+  .fc-front{ background:var(--panel); }
+  .fc-front .q{ font-family:'Fraunces', serif; font-size:16px; }
+  .fc-back{ background:var(--panel-2); transform:rotateY(180deg); color:var(--teal); font-size:13px;}
+  .fc-idx{
+    position:absolute; top:8px; left:10px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10px; color:var(--muted);
+  }
+
+  /* ---------- QUIZ ---------- */
+  .quiz-top{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:18px;}
+  .score-pill{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px;
+    background:var(--panel-2);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:8px 16px;
+  }
+  .score-pill b{ color:var(--gold); }
+  .btn{
+    background:var(--panel-2);
+    border:1px solid var(--line);
+    color:var(--text);
+    padding:8px 14px;
+    border-radius:8px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    cursor:pointer;
+  }
+  .btn:hover{ border-color:var(--gold); }
+  .q-card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:16px 18px;
+    margin-bottom:12px;
+  }
+  .q-card .qn{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:var(--muted);
+    margin-bottom:6px;
+  }
+  .q-card .qtext{ font-size:14.5px; margin:0 0 12px; line-height:1.45;}
+  .opt-list{ display:flex; flex-direction:column; gap:8px; }
+  .opt{
+    text-align:left;
+    background:var(--panel-2);
+    border:1px solid var(--line);
+    color:var(--text);
+    padding:9px 12px;
+    border-radius:7px;
+    font-size:13px;
+    cursor:pointer;
+  }
+  .opt:hover{ border-color:var(--teal); }
+  .opt.correct{ border-color:var(--good); background:rgba(111,203,142,0.12); color:var(--good); }
+  .opt.wrong{ border-color:var(--bad); background:rgba(217,112,122,0.12); color:var(--bad); }
+  .opt[disabled]{ cursor:default; }
+
+  footer{
+    text-align:center;
+    margin-top:40px;
+    padding-top:18px;
+    border-top:1px solid var(--line);
+    color:var(--muted);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:.04em;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <svg class="hero-curve" viewBox="0 0 280 200" fill="none">
+      <path d="M20 190 C 60 190, 90 140, 110 90 C 125 55, 150 20, 200 15" stroke="#5FBFB3" stroke-width="2" opacity="0.8"/>
+      <circle cx="200" cy="15" r="5" fill="#E3A857">
+        <animate attributeName="r" values="5;8;5" dur="2.4s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="1;0.4;1" dur="2.4s" repeatCount="indefinite"/>
+      </circle>
+      <line x1="200" y1="15" x2="260" y2="15" stroke="#E3A857" stroke-width="1" stroke-dasharray="3 3" opacity="0.6"/>
+      <line x1="200" y1="15" x2="200" y2="0" stroke="#E3A857" stroke-width="1" stroke-dasharray="3 3" opacity="0.6"/>
+    </svg>
+    <p class="eyebrow">Physical Pharmacy · States of Matter · Lecture 3</p>
+    <h1 class="title">Study <em>Smart</em></h1>
+    <p class="hero-sub">Supercritical fluids, the phase rule, and solid dispersions — condensed into the laws worth remembering, the diagrams worth tracing, and the questions worth answering.</p>
+  </div>
+
+  <nav class="tabs">
+    <button class="tab-btn active" data-tab="overview"><span class="n">01</span>Overview</button>
+    <button class="tab-btn" data-tab="diagrams"><span class="n">02</span>Diagrams</button>
+    <button class="tab-btn" data-tab="minimap"><span class="n">03</span>Mini Map</button>
+    <button class="tab-btn" data-tab="flashcards"><span class="n">04</span>Flash Cards</button>
+    <button class="tab-btn" data-tab="quiz"><span class="n">05</span>Quiz Bank</button>
+  </nav>
+
+  <!-- ============ 1. OVERVIEW ============ -->
+  <section class="panel active" id="overview">
+    <h2 class="sec-title">The essentials</h2>
+    <p class="sec-desc">No lecture-length prose here — just the definitions, rules, and numbers you actually need to recall under exam pressure.</p>
+    <div class="law-grid" id="lawGrid"></div>
+  </section>
+
+  <!-- ============ 2. DIAGRAMS ============ -->
+  <section class="panel" id="diagrams">
+    <h2 class="sec-title">Trace the curves</h2>
+    <p class="sec-desc">Every figure from the lecture, rebuilt so you can click into it instead of just looking at it.</p>
+
+    <div class="diagram-block">
+      <h3>Supercritical region of a compressed gas</h3>
+      <p class="hint">Click a region or the critical point.</p>
+      <div class="diagram-flex">
+        <svg viewBox="0 0 340 260" width="340" height="260">
+          <line x1="55" y1="10" x2="55" y2="230" stroke="#2A3540"/>
+          <line x1="55" y1="230" x2="320" y2="230" stroke="#2A3540"/>
+          <path d="M75 230 C 140 230, 175 160, 190 95" stroke="#5FBFB3" stroke-width="2" fill="none"/>
+          <line x1="120" y1="10" x2="120" y2="230" stroke="#2A3540" stroke-dasharray="3 3"/>
+          <line x1="190" y1="10" x2="190" y2="95" stroke="#2A3540" stroke-dasharray="3 3"/>
+          <line x1="55" y1="95" x2="320" y2="95" stroke="#2A3540" stroke-dasharray="3 3"/>
+          <rect class="zone" data-info="solid" x="56" y="10" width="63" height="220" fill="#1F2933" opacity="0.01"/>
+          <rect class="zone" data-info="liquid" x="121" y="10" width="68" height="220" fill="#1F2933" opacity="0.01"/>
+          <rect class="zone" data-info="gas" x="190" y="96" width="129" height="134" fill="#1F2933" opacity="0.01"/>
+          <rect class="zone" data-info="scf" x="190" y="10" width="129" height="85" fill="#E3A857" opacity="0.06"/>
+          <text x="75" y="130" fill="#8B96A5" font-size="11" font-family="IBM Plex Mono">Solid</text>
+          <text x="130" y="130" fill="#8B96A5" font-size="11" font-family="IBM Plex Mono">Liquid</text>
+          <text x="230" y="180" fill="#8B96A5" font-size="11" font-family="IBM Plex Mono">Gas</text>
+          <text x="205" y="35" fill="#E3A857" font-size="11" font-family="IBM Plex Mono">Supercritical</text>
+          <circle class="zone" data-info="cp" cx="190" cy="95" r="6" fill="#E3A857"/>
+          <text x="199" y="90" fill="#E3A857" font-size="10" font-family="IBM Plex Mono">CP</text>
+          <text x="118" y="245" fill="#8B96A5" font-size="10" font-family="IBM Plex Mono">Tc →</text>
+          <text x="10" y="95" fill="#8B96A5" font-size="10" font-family="IBM Plex Mono">Pc</text>
+          <text x="150" y="252" fill="#8B96A5" font-size="10" font-family="IBM Plex Mono" text-anchor="middle">Temperature</text>
+          <text x="14" y="120" fill="#8B96A5" font-size="10" font-family="IBM Plex Mono" transform="rotate(-90 14 120)">Pressure</text>
+        </svg>
+        <div class="info-box" id="scfInfo"><span class="tag">Tap a zone</span>Click the Solid, Liquid, Gas or Supercritical region, or the CP point, to read what defines it.</div>
+      </div>
+    </div>
+
+    <div class="diagram-block">
+      <h3>Selective extraction by pressure (Fig. 2-17)</h3>
+      <p class="hint">Click a pressure band — higher pressure pulls out heavier, less volatile compounds.</p>
+      <div class="diagram-flex">
+        <svg viewBox="0 0 340 180" width="340" height="180">
+          <line x1="20" y1="160" x2="320" y2="160" stroke="#2A3540"/>
+          <rect class="zone" data-info="oils" x="20" y="60" width="70" height="100" fill="#5FBFB3" opacity="0.18"/>
+          <rect class="zone" data-info="terp" x="90" y="80" width="60" height="80" fill="#5FBFB3" opacity="0.30"/>
+          <rect class="zone" data-info="fatty" x="150" y="40" width="60" height="120" fill="#5FBFB3" opacity="0.42"/>
+          <rect class="zone" data-info="waxres" x="210" y="20" width="70" height="140" fill="#E3A857" opacity="0.30"/>
+          <rect class="zone" data-info="pig" x="280" y="55" width="40" height="105" fill="#E3A857" opacity="0.50"/>
+          <text x="55" y="175" fill="#8B96A5" font-size="9" font-family="IBM Plex Mono" text-anchor="middle">low P</text>
+          <text x="245" y="175" fill="#8B96A5" font-size="9" font-family="IBM Plex Mono" text-anchor="middle">high P</text>
+          <text x="55" y="12" fill="#8B96A5" font-size="9" font-family="IBM Plex Mono" text-anchor="middle">870 psi</text>
+          <text x="180" y="12" fill="#8B96A5" font-size="9" font-family="IBM Plex Mono" text-anchor="middle">1450 psi</text>
+          <text x="300" y="12" fill="#8B96A5" font-size="9" font-family="IBM Plex Mono" text-anchor="middle">4350 psi</text>
+        </svg>
+        <div class="info-box" id="extInfo"><span class="tag">Tap a band</span>Each band is a family of compounds that becomes extractable as CO₂ pressure climbs (all at ~60°C).</div>
+      </div>
+    </div>
+
+    <div class="diagram-block">
+      <h3>Phase diagram for water (Fig. 2-22)</h3>
+      <p class="hint">Click the triple point O, a curve, or a labelled system point (D, E).</p>
+      <div class="diagram-flex">
+        <svg viewBox="0 0 320 240" width="320" height="240">
+          <line x1="40" y1="10" x2="40" y2="220" stroke="#2A3540"/>
+          <line x1="40" y1="220" x2="300" y2="220" stroke="#2A3540"/>
+          <path class="zone" data-info="OB" d="M75 20 C 90 90, 100 130, 108 150" stroke="#5FBFB3" stroke-width="2" fill="none"/>
+          <path class="zone" data-info="OA" d="M108 150 C 150 100, 200 60, 250 25" stroke="#5FBFB3" stroke-width="2" fill="none"/>
+          <path class="zone" data-info="OC" d="M60 200 C 80 175, 95 160, 108 150" stroke="#5FBFB3" stroke-width="2" fill="none"/>
+          <circle class="zone" data-info="O" cx="108" cy="150" r="5" fill="#E3A857"/>
+          <circle class="zone" data-info="D" cx="200" cy="150" r="4" fill="#8B96A5"/>
+          <circle class="zone" data-info="E" cx="200" cy="82" r="4" fill="#8B96A5"/>
+          <text x="112" y="146" fill="#E3A857" font-size="10" font-family="IBM Plex Mono">O</text>
+          <text x="55" y="70" fill="#8B96A5" font-size="10" font-family="IBM Plex Mono">Solid</text>
+          <text x="150" y="90" fill="#8B96A5" font-size="10" font-family="IBM Plex Mono">Liquid</text>
+          <text x="220" y="190" fill="#8B96A5" font-size="10" font-family="IBM Plex Mono">Vapor</text>
+          <text x="205" y="150" fill="#8B96A5" font-size="9" font-family="IBM Plex Mono">D</text>
+          <text x="205" y="80" fill="#8B96A5" font-size="9" font-family="IBM Plex Mono">E</text>
+          <text x="160" y="234" fill="#8B96A5" font-size="10" font-family="IBM Plex Mono" text-anchor="middle">Temperature (°C)</text>
+          <text x="14" y="120" fill="#8B96A5" font-size="10" font-family="IBM Plex Mono" transform="rotate(-90 14 120)">Vapor pressure</text>
+        </svg>
+        <div class="info-box" id="waterInfo"><span class="tag">Tap a feature</span>The triple point O sits at 4.58 mm Hg and 0.0098°C — the only point where solid, liquid and vapor coexist.</div>
+      </div>
+    </div>
+
+    <div class="diagram-block">
+      <h3>Eutectic system</h3>
+      <p class="hint">Drag the slider across the composition axis (pure A → pure B).</p>
+      <div class="diagram-flex" style="flex-direction:column;">
+        <svg viewBox="0 0 400 180" width="100%" height="180" style="max-width:400px;">
+          <line x1="30" y1="160" x2="370" y2="160" stroke="#2A3540"/>
+          <path d="M40 30 C 120 30, 150 130, 200 145 C 250 130, 280 30, 360 30" stroke="#5FBFB3" stroke-width="2" fill="none"/>
+          <line x1="40" y1="30" x2="360" y2="30" stroke="#2A3540" stroke-dasharray="3 3"/>
+          <circle id="eutDot" cx="200" cy="145" r="5" fill="#E3A857"/>
+          <text x="40" y="175" fill="#8B96A5" font-size="10" font-family="IBM Plex Mono">Pure A</text>
+          <text x="330" y="175" fill="#8B96A5" font-size="10" font-family="IBM Plex Mono">Pure B</text>
+          <text x="200" y="160" fill="#E3A857" font-size="9" font-family="IBM Plex Mono" text-anchor="middle">eutectic pt</text>
+        </svg>
+        <input type="range" min="0" max="100" value="50" id="eutSlider" style="max-width:400px;">
+        <div class="info-box" id="eutInfo" style="max-width:400px;"><span class="tag">mole fraction B: 50%</span>At the eutectic point, solid A and solid B crystallize together at the lowest melting point of the whole system.</div>
+      </div>
+    </div>
+
+    <div class="diagram-block">
+      <h3>Phase rule calculator</h3>
+      <p class="hint">F = C − P + 2 — set the components and phases yourself.</p>
+      <div class="calc-row">
+        <div><label>Components (C)</label><input type="number" id="calcC" min="1" max="5" value="1"></div>
+        <div><label>Phases (P)</label><input type="number" id="calcP" min="1" max="5" value="1"></div>
+      </div>
+      <div class="calc-out">F = <b id="calcF">2</b> — <span class="verdict" id="calcVerdict">bivariant</span></div>
+    </div>
+  </section>
+
+  <!-- ============ 3. MINI MAP ============ -->
+  <section class="panel" id="minimap">
+    <h2 class="sec-title">Topic map</h2>
+    <p class="sec-desc">Click a title — the full explanation opens right here, next to the list.</p>
+    <div class="mm-wrap">
+      <div class="mm-list" id="mmList"></div>
+      <div class="mm-reader" id="mmReader">
+        <p class="mm-empty">Select a topic on the left to read it here.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 4. FLASH CARDS ============ -->
+  <section class="panel" id="flashcards">
+    <h2 class="sec-title">Flash cards</h2>
+    <p class="sec-desc">Tap a card to flip it.</p>
+    <div class="fc-grid" id="fcGrid"></div>
+  </section>
+
+  <!-- ============ 5. QUIZ BANK ============ -->
+  <section class="panel" id="quiz">
+    <h2 class="sec-title">Quiz bank</h2>
+    <p class="sec-desc">Every option order is reshuffled each time you load or reset the bank — no memorizing button positions.</p>
+    <div class="quiz-top">
+      <div class="score-pill">Score: <b id="scoreVal">0</b> / <span id="scoreTotal">0</span></div>
+      <button class="btn" id="resetQuiz">↻ Reshuffle &amp; Reset</button>
+    </div>
+    <div id="quizList"></div>
+  </section>
+
+  <footer>© Anmar Taha. All rights reserved.</footer>
+</div>
+
+<script>
+/* ===================== DATA ===================== */
+
+const laws = [
+  {t:"Supercritical Fluid", f:"SCF", d:"Any substance at temperature and pressure above its critical point, where distinct liquid and gas phases no longer exist.", gold:false},
+  {t:"Critical Temperature (Tc)", f:"Tc", d:"The highest temperature at which a substance can still exist as a liquid. Above it, no amount of pressure can liquefy it.", gold:false},
+  {t:"Critical Pressure (Pc)", f:"Pc", d:"The minimum pressure required to liquefy a gas at a given temperature.", gold:false},
+  {t:"Pressure effect on SCF", f:"↑P → ↑ρ, viscosity ≈ const.", d:"Raising pressure increases gas density without raising viscosity, and increases the SCF's ability to dissolve compounds.", gold:false},
+  {t:"Pharma uses of SCF", f:"Extraction · Formulation", d:"Supercritical fluids are used in extraction and in preparing formulations — classic example: decaffeination of coffee and tea using supercritical CO₂ instead of methylene chloride.", gold:false},
+  {t:"The Phase Rule", f:"F = C − P + 2", d:"C = number of components, P = number of phases present, F = degrees of freedom needed to define the system.", gold:true},
+  {t:"Phase (definition)", f:"—", d:"A homogeneous, physically distinct portion of a system, separated from other portions by bounding surfaces.", gold:true},
+  {t:"Triple point of water", f:"4.58 mmHg, 0.0098°C", d:"The single invariant point (F = 0) where solid, liquid and vapor water coexist.", gold:true},
+  {t:"Eutectic mixture", f:"Type 1 of 3", d:"Two or more components (e.g. API + excipient) with a melting point lower than any individual component; they don't interact chemically — a purely physical mixture.", gold:false},
+  {t:"Solid solution", f:"Type 2 of 3", d:"A solid solute dissolved in a solid solvent to form a mixed crystal; a 'guest' inserts into the 'host' lattice — substitutional or interstitial.", gold:false},
+  {t:"Molecular dispersion", f:"Type 3 of 3", d:"One component dispersed molecularly in another; the whole solid is amorphous and shows an intermediate glass transition temperature (Tg).", gold:false},
+  {t:"Why solid dispersions matter", f:"↑ dissolution, ↑ bioavailability", d:"They offer a route to improving the dissolution rate and bioavailability of poorly water-soluble drugs.", gold:true},
+];
+
+const scfInfo = {
+  solid:{tag:"Solid region", text:"Below Tc and at high pressure/low temperature — the substance is a rigid solid, outside the liquid-vapor envelope."},
+  liquid:{tag:"Liquid region", text:"Between the solid boundary and the liquid–vapor curve, below Tc — distinct liquid phase exists here, and can still be boiled or condensed normally."},
+  gas:{tag:"Gas region", text:"Below the critical pressure and below the liquid–vapor envelope — an ordinary gas that can still be liquefied by adding pressure (if below Tc)."},
+  scf:{tag:"Supercritical region", text:"Above both Tc and Pc. No distinct liquid or gas phase exists — this is where SCF extraction happens, with liquid-like solvating power and gas-like viscosity."},
+  cp:{tag:"Critical Point (CP)", text:"The exact (Tc, Pc) coordinate where the liquid–vapor boundary vanishes and the supercritical region begins."}
+};
+const extInfo = {
+  oils:{tag:"~870 psi / 60°C", text:"Essential oils — the most volatile, low-pressure-extractable fraction."},
+  terp:{tag:"between bands", text:"Higher terpenes and esters — extracted just above the essential oils, at moderately higher pressure."},
+  fatty:{tag:"rising pressure", text:"Free fatty acids — need more pressure/solvating power than the oils and terpenes before them."},
+  waxres:{tag:"~1450–4350 psi", text:"Free oils, waxes and resins — heavier, less volatile material that only comes out as pressure (and CO₂ density) climbs."},
+  pig:{tag:"~4350 psi / 60°C", text:"Pigments — the least volatile, heaviest fraction, requiring the highest pressure in this series to extract."}
+};
+const waterInfo = {
+  OA:{tag:"Curve OA", text:"The liquid–vapor boundary — a two-phase, univariant line (F = 1). You must fix one variable (P or t) to define a point on it."},
+  OB:{tag:"Curve OB", text:"The solid–liquid boundary — also two-phase, univariant (F = 1)."},
+  OC:{tag:"Curve OC", text:"The solid–vapor boundary — also two-phase, univariant (F = 1)."},
+  O:{tag:"Triple point O", text:"Solid + liquid + vapor coexist here: three phases, one component → F = 1 − 3 + 2 = 0, invariant. Fixed at 4.58 mmHg and 0.0098°C."},
+  D:{tag:"System D", text:"Lies inside a single-phase area (e.g. liquid) — bivariant (F = 2). Both pressure and temperature must be fixed to define it."},
+  E:{tag:"System E", text:"Lies on a two-phase boundary line — univariant (F = 1). Fixing just one variable defines it."}
+};
+
+const eutInfo = (pct)=>{
+  if(pct < 15) return {tag:"mole fraction B: "+pct+"% (near pure A)", text:"Almost pure A — melting point close to Melting point (A); only a trace of B is dissolved in the liquid."};
+  if(pct > 85) return {tag:"mole fraction B: "+pct+"% (near pure B)", text:"Almost pure B — melting point close to Melting point (B)."};
+  if(pct>=45 && pct<=55) return {tag:"mole fraction B: "+pct+"% (eutectic point)", text:"At (or very near) the eutectic composition: solid A + solid B crystallize together at the eutectic temperature — the lowest melting point of the entire system, well below either pure component's melting point."};
+  if(pct<50) return {tag:"mole fraction B: "+pct+"%", text:"Region of 'Solid A + liquid' — solid A is in equilibrium with a B-enriched liquid above the eutectic temperature."};
+  return {tag:"mole fraction B: "+pct+"%", text:"Region of 'Solid B + liquid' — solid B is in equilibrium with an A-enriched liquid above the eutectic temperature."};
+};
+
+const miniMap = [
+  {t:"Supercritical fluid — definition", body:"A supercritical fluid (SCF) is any substance at a temperature and pressure above its critical point, where distinct liquid and gas phases do not exist."},
+  {t:"Critical temperature & pressure", body:"Critical temperature (Tc) is the highest temperature at which a substance can exist as a liquid — above it, no amount of pressure can liquefy it. Critical pressure (Pc) is the minimum pressure required to liquefy a gas at a given temperature."},
+  {t:"Pressure, density & solvating power", body:"As pressure is raised, the density of the gas increases without an increase in viscosity, while the ability of the supercritical fluid to dissolve compounds also increases. A gas with little dissolving power under normal conditions can fully dissolve a compound in the supercritical range."},
+  {t:"Pharmaceutical uses of SCFs", body:"Common uses in pharmaceutical sciences include extraction and the preparation of formulations."},
+  {t:"Decaffeination example", body:"One of the best examples of supercritical fluid use is coffee/tea decaffeination. Solvents like methylene chloride were used previously, at great expense and toxicity risk from residual solvent. Supercritical CO₂ is now used instead."},
+  {t:"Selective extraction by pressure (Fig. 2-17)", body:"Raising the pressure of a supercritical fluid changes what it can selectively extract — essential oils come out at the lowest pressures, followed by higher terpenes/esters, free fatty acids, then free oils, waxes, resins, and finally pigments at the highest pressures (roughly 870 → 1450 → 4350 psi at 60°C)."},
+  {t:"The phase rule", body:"To define the state of each phase, several independent variables must be known. This is captured by the phase rule: F = C − P + 2, where C is the number of components and P is the number of phases present."},
+  {t:"Phase — definition", body:"A phase is a homogeneous, physically distinct portion of a system, separated from other portions by bounding surfaces. Water + its vapor = a two-phase system. Ice + liquid water + water vapor = a three-phase system."},
+  {t:"Phase rule applied to single-component systems", body:"With C = 1: one phase (gas, liquid or solid) gives F = 2 (bivariant) — you must fix two variables like P and t. Two phases (gas–liquid, liquid–solid, or gas–solid) give F = 1 (univariant) — fix one variable. Three phases (gas–liquid–solid) give F = 0 (invariant) — only possible at one fixed point."},
+  {t:"Water's phase diagram (Fig. 2-22)", body:"The triple point O, at 4.58 mm Hg and 0.0098°C, is the only point where solid, liquid and vapor water coexist. Lines OA, OB and OC are the two-phase boundaries; any point on them is univariant. Any point inside an area (like systems D or E's surrounding regions) is bivariant unless it lies exactly on a boundary."},
+  {t:"Solid dispersions — overview", body:"There are three types of solid dispersion in pharmaceutics: eutectic mixtures, solid solutions, and molecular dispersions."},
+  {t:"Eutectic mixtures", body:"A eutectic mixture combines two or more components (e.g. an API and an excipient) that together melt at a lower temperature than any individual component. The components don't interact chemically — it's a physical mixture — and they typically inhibit each other's crystallization at specific ratios, which can enhance the dissolution rate and bioavailability of the API. Preparation: melt the drug and carrier together, cool the homogeneous liquid until it solidifies, then comminute and sieve."},
+  {t:"Solid solutions", body:"In a solid solution, each solid phase contains both components — a solid solute is dissolved in a solid solvent to give a mixed crystal. The minor 'guest' component inserts into the 'host' crystal lattice, using molecular similarities and/or open spaces. Depending on the degree of interaction, melting behavior can be higher, lower, or unchanged. Two types: substitutional and interstitial solid solutions. Example: an amlodipine–cyclodextrin solid solution, made by dissolving both in different solvents, mixing, then isolating the solid by filtration and drying."},
+  {t:"Molecular dispersion & glass transition", body:"A molecular dispersion disperses one component in another so the overall solid is amorphous. These mixed amorphous (glass) solutions show an intermediate glass transition temperature (Tg) — the temperature where an amorphous material shifts from a hard, brittle glassy state to a softer, more flexible rubbery state — between those of the pure amorphous solids. Preparation: dissolve drug and carrier in a common solvent, then evaporate the solvent."},
+  {t:"Why solid dispersions matter", body:"There is widespread interest in solid dispersions because they can offer a means of improving the dissolution rate and bioavailability of poorly soluble drugs."},
+];
+
+const flashcards = [
+  {q:"Define a supercritical fluid (SCF).", a:"Any substance above both its critical temperature and critical pressure, where distinct liquid and gas phases no longer exist."},
+  {q:"Define critical temperature (Tc).", a:"The highest temperature at which a substance can still exist as a liquid — above it, pressure alone cannot liquefy it."},
+  {q:"Define critical pressure (Pc).", a:"The minimum pressure required to liquefy a gas at a given temperature."},
+  {q:"What happens to gas density and viscosity as pressure rises toward supercritical conditions?", a:"Density increases; viscosity stays essentially unchanged (does not increase)."},
+  {q:"What happens to an SCF's dissolving power as pressure rises?", a:"It increases — a gas with little dissolving power at normal conditions can fully dissolve a compound in the supercritical range."},
+  {q:"Name the classic pharmaceutical example of supercritical fluid use.", a:"Decaffeination of coffee and tea using supercritical CO₂."},
+  {q:"Why was supercritical CO₂ adopted over methylene chloride for decaffeination?", a:"Methylene chloride was expensive to purchase/dispose of and carried toxicity risk from residual solvent."},
+  {q:"State the phase rule.", a:"F = C − P + 2, where C = components, P = phases present, F = degrees of freedom."},
+  {q:"Define 'phase'.", a:"A homogeneous, physically distinct portion of a system, separated from other portions by bounding surfaces."},
+  {q:"How many phases: ice + liquid water + water vapor in equilibrium?", a:"Three phases."},
+  {q:"Single-component system, 1 phase — what is F, and what's it called?", a:"F = 2 — bivariant."},
+  {q:"Single-component system, 2 phases — what is F, and what's it called?", a:"F = 1 — univariant."},
+  {q:"Single-component system, 3 phases — what is F, and what's it called?", a:"F = 0 — invariant."},
+  {q:"Where is water's triple point?", a:"4.58 mm Hg and 0.0098°C."},
+  {q:"Name the three types of solid dispersion.", a:"Eutectic mixtures, solid solutions, and molecular dispersions."},
+  {q:"Do eutectic mixture components interact chemically?", a:"No — it's a purely physical mixture; they inhibit each other's crystallization."},
+  {q:"How is a eutectic mixture typically prepared?", a:"Melt drug and carrier together, cool to solidify, then comminute and sieve."},
+  {q:"What is a solid solution?", a:"A solid solute dissolved in a solid solvent, forming a mixed crystal — a 'guest' inserts into the 'host' lattice."},
+  {q:"Name the two types of solid solution.", a:"Substitutional and interstitial solid solutions."},
+  {q:"Give an example of a solid solution.", a:"Amlodipine–cyclodextrin solid solution, prepared by dissolving both, mixing, then filtering and drying."},
+  {q:"Define glass transition temperature (Tg).", a:"The temperature at which an amorphous material shifts from a hard, brittle glassy state to a softer, flexible, rubbery state."},
+  {q:"How is a molecular dispersion typically prepared?", a:"Dissolve drug and carrier in a common solvent, then evaporate the solvent."},
+  {q:"Why does the pharmaceutical field care about solid dispersions?", a:"They can improve the dissolution rate and bioavailability of poorly soluble drugs."},
+];
+
+const quizRaw = [
+  {q:"What defines a supercritical fluid?", a:"A substance at temperature and pressure above its critical point, with no distinct liquid or gas phase", w:["A gas cooled below its boiling point","A liquid held exactly at 1 atmosphere","A solid heated past its melting point"]},
+  {q:"Critical temperature (Tc) is best described as:", a:"The highest temperature at which a substance can still exist as a liquid", w:["The temperature at which a gas becomes a solid directly","The boiling point at 1 atmosphere pressure","The lowest temperature at which sublimation occurs"]},
+  {q:"Critical pressure (Pc) is:", a:"The minimum pressure needed to liquefy a gas at a given temperature", w:["The maximum pressure a gas can withstand before decomposing","The pressure at which a solid melts","Atmospheric pressure at the triple point"]},
+  {q:"Above Tc, can a gas be liquefied by increasing pressure?", a:"No — no amount of pressure can liquefy it above Tc", w:["Yes, with high enough pressure","Only if the pressure exceeds 1000 atm","Yes, but only in the presence of a catalyst"]},
+  {q:"As pressure rises in the supercritical range, gas density:", a:"Increases, without a corresponding rise in viscosity", w:["Decreases steadily","Stays exactly constant","Increases along with a large rise in viscosity"]},
+  {q:"As pressure rises, a supercritical fluid's ability to dissolve compounds:", a:"Increases", w:["Decreases","Stays unchanged","Becomes unpredictable"]},
+  {q:"Which two pharmaceutical applications are named for supercritical fluids?", a:"Extraction and preparation of formulations", w:["Sterilization and lyophilization","Granulation and coating","Milling and blending"]},
+  {q:"The classic pharmaceutical example of SCF use given in the lecture is:", a:"Decaffeination of coffee and tea", w:["Encapsulation of vitamins","Sterilizing surgical instruments","Freeze-drying vaccines"]},
+  {q:"Which solvent was traditionally used for decaffeination before supercritical CO₂?", a:"Methylene chloride", w:["Ethanol","Acetone","Hexane"]},
+  {q:"Why was the traditional decaffeination solvent problematic?", a:"Expensive purchase/disposal and increased toxicity risk from residual solvent", w:["It was too slow to work with","It changed the coffee's color","It was not available commercially"]},
+  {q:"In Fig. 2-17, which compounds are extracted at the lowest supercritical CO₂ pressure?", a:"Essential oils", w:["Pigments","Waxes","Resins"]},
+  {q:"In Fig. 2-17, which compounds require the highest pressure (~4350 psi/60°C) to extract?", a:"Pigments", w:["Essential oils","Higher terpenes and esters","Free fatty acids"]},
+  {q:"What does increasing supercritical fluid pressure allow, per Fig. 2-17?", a:"Selective extraction of progressively heavier, less volatile compounds", w:["Extraction of only volatile compounds regardless of pressure","Removal of all compounds simultaneously at any pressure","No change in extraction selectivity"]},
+  {q:"State the phase rule.", a:"F = C − P + 2", w:["F = C + P − 2","F = P − C + 2","F = 2C − P"]},
+  {q:"In the phase rule, what does 'C' represent?", a:"The number of components", w:["The number of chemical reactions","The critical temperature","The number of container walls"]},
+  {q:"In the phase rule, what does 'P' represent?", a:"The number of phases present", w:["The pressure of the system","The number of physical states possible","The purity of the sample"]},
+  {q:"In the phase rule, what does 'F' represent?", a:"The degrees of freedom needed to define the system", w:["The total free energy of the system","The fusion temperature","The number of independent components"]},
+  {q:"How is a 'phase' defined?", a:"A homogeneous, physically distinct portion of a system separated by bounding surfaces", w:["Any single chemical compound","A stage in a chemical reaction","The temperature range of a solid"]},
+  {q:"Water in equilibrium with its vapor is a system of how many phases?", a:"Two phases", w:["One phase","Three phases","Four phases"]},
+  {q:"Ice, liquid water, and water vapor in equilibrium form a system of how many phases?", a:"Three phases", w:["One phase","Two phases","Zero phases"]},
+  {q:"For a single-component system with 1 phase, what is F?", a:"F = 2 (bivariant)", w:["F = 1 (univariant)","F = 0 (invariant)","F = 3 (trivariant)"]},
+  {q:"For a single-component system with 2 phases, what is F?", a:"F = 1 (univariant)", w:["F = 2 (bivariant)","F = 0 (invariant)","F = 3 (trivariant)"]},
+  {q:"For a single-component system with 3 phases, what is F?", a:"F = 0 (invariant)", w:["F = 1 (univariant)","F = 2 (bivariant)","F = -1"]},
+  {q:"At the triple point of water, the system is:", a:"Invariant — fixed at one exact point", w:["Bivariant — anywhere in an area","Univariant — anywhere along a line","Undefined"]},
+  {q:"What is the vapor pressure at water's triple point?", a:"4.58 mm Hg", w:["1.00 mm Hg","760 mm Hg","10.0 mm Hg"]},
+  {q:"What is the temperature at water's triple point?", a:"0.0098°C", w:["0.0000°C","100°C","-0.0098°C is wrong; it's positive but 4°C"]},
+  {q:"How many recognized types of solid dispersion are described?", a:"Three: eutectic mixtures, solid solutions, molecular dispersions", w:["Two: crystalline and amorphous only","Four, including emulsions","Five, including suspensions"]},
+  {q:"A eutectic mixture is defined as:", a:"Two or more components with a melting point lower than any individual component", w:["A single pure crystalline compound","A mixture that always melts higher than its components","A chemically reacted new compound"]},
+  {q:"Do the components of a eutectic mixture react chemically?", a:"No — it remains a physical mixture", w:["Yes, they form a new chemical entity","Only above their combined melting point","Only in the presence of moisture"]},
+  {q:"A key benefit of eutectic mixtures in formulation is:", a:"Enhanced dissolution rate and bioavailability of the API", w:["Reduced drug potency","Increased melting point of the API","Elimination of the need for excipients"]},
+  {q:"The simplest method to prepare a eutectic mixture is:", a:"Melt drug and carrier together, cool to solidify, then comminute and sieve", w:["Spray-dry a solution of the two components","Co-precipitate from a supersaturated solution","Freeze-dry a suspension of the two components"]},
+  {q:"In a solid solution, the 'guest' component:", a:"Inserts into the structure of the 'host' crystal lattice", w:["Remains chemically separate as its own crystal","Always destroys the host's crystal structure","Only exists as a surface coating on the host"]},
+  {q:"The two named types of solid solution are:", a:"Substitutional and interstitial", w:["Amorphous and crystalline","Ionic and covalent","Primary and secondary"]},
+  {q:"Melting behavior of a solid solution, relative to its pure components, can be:", a:"Higher, lower, or unchanged, depending on guest–host interaction", w:["Always exactly the average of both components","Always higher than either component","Always identical to the host alone"]},
+  {q:"Which example solid solution is given in the lecture?", a:"Amlodipine and cyclodextrin solid solution", w:["Ibuprofen and PEG solid solution","Paracetamol and urea eutectic","Aspirin and starch dispersion"]},
+  {q:"How is the amlodipine–cyclodextrin solid solution prepared?", a:"Dissolve both in different solvents, mix, then isolate the solid by filtration and drying", w:["Melt both components together and cool","Spray-coat cyclodextrin onto crystalline amlodipine","Compress the two powders together"]},
+  {q:"In a molecular dispersion, the overall solid is:", a:"Amorphous", w:["Perfectly crystalline","Always liquid at room temperature","A separate two-phase mixture"]},
+  {q:"Define glass transition temperature (Tg).", a:"The temperature where an amorphous material shifts from a hard, brittle glassy state to a softer, rubbery state", w:["The melting point of a crystalline solid","The boiling point of the dispersion solvent","The temperature at which sublimation begins"]},
+  {q:"A mixed amorphous (glass) solution's Tg typically lies:", a:"Between the Tg values of the pure amorphous components", w:["Always above both pure components' Tg","Always below both pure components' Tg","Exactly at 0°C regardless of composition"]},
+  {q:"How is a molecular dispersion typically prepared?", a:"Dissolve drug and carrier in a common solvent, then evaporate the solvent", w:["Melt both components and quench-cool rapidly","Mill the two solids together mechanically","Precipitate the drug from a supersaturated brine"]},
+  {q:"Why is there widespread pharmaceutical interest in solid dispersions overall?", a:"They can improve dissolution rate and bioavailability of poorly soluble drugs", w:["They reduce manufacturing cost only","They eliminate the need for stability testing","They are required by regulation for all tablets"]},
+];
+
+/* ===================== HELPERS ===================== */
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+/* ===================== TABS ===================== */
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+  });
+});
+
+/* ===================== OVERVIEW ===================== */
+const lawGrid = document.getElementById('lawGrid');
+laws.forEach(l=>{
+  const card = document.createElement('div');
+  card.className = 'law-card' + (l.gold ? ' gold' : '');
+  card.innerHTML = `<h3>${l.t}</h3><div class="formula">${l.f}</div><p>${l.d}</p>`;
+  lawGrid.appendChild(card);
+});
+
+/* ===================== DIAGRAMS ===================== */
+function wireZones(selector, dataMap, targetId){
+  document.querySelectorAll(selector).forEach(el=>{
+    el.addEventListener('click', ()=>{
+      document.querySelectorAll(selector).forEach(z=>z.classList.remove('selected'));
+      el.classList.add('selected');
+      const key = el.dataset.info;
+      const info = dataMap[key];
+      if(info){
+        document.getElementById(targetId).innerHTML = `<span class="tag">${info.tag}</span>${info.text}`;
+      }
+    });
+  });
+}
+wireZones('#diagrams svg:nth-of-type(1) .zone', scfInfo, 'scfInfo');
+wireZones('#diagrams .diagram-block:nth-of-type(2) .zone', extInfo, 'extInfo');
+wireZones('#diagrams .diagram-block:nth-of-type(3) .zone', waterInfo, 'waterInfo');
+
+const eutSlider = document.getElementById('eutSlider');
+const eutDot = document.getElementById('eutDot');
+const eutInfoBox = document.getElementById('eutInfo');
+function updateEutectic(){
+  const pct = parseInt(eutSlider.value,10);
+  const x = 40 + (pct/100)*320;
+  // approximate curve y using the same cubic shape, simple piecewise estimate
+  let y;
+  if(pct<=50){ y = 30 + (145-30)*(pct/50); } else { y = 145 - (145-30)*((pct-50)/50); }
+  eutDot.setAttribute('cx', x);
+  eutDot.setAttribute('cy', y);
+  const info = eutInfo(pct);
+  eutInfoBox.innerHTML = `<span class="tag">${info.tag}</span>${info.text}`;
+}
+eutSlider.addEventListener('input', updateEutectic);
+updateEutectic();
+
+const calcC = document.getElementById('calcC');
+const calcP = document.getElementById('calcP');
+function updateCalc(){
+  const c = parseInt(calcC.value||1,10);
+  const p = parseInt(calcP.value||1,10);
+  const f = c - p + 2;
+  document.getElementById('calcF').textContent = f;
+  let verdict = f>=2 ? 'bivariant or higher' : (f===1 ? 'univariant' : (f===0 ? 'invariant' : 'not physically possible'));
+  document.getElementById('calcVerdict').textContent = verdict;
+}
+calcC.addEventListener('input', updateCalc);
+calcP.addEventListener('input', updateCalc);
+updateCalc();
+
+/* ===================== MINI MAP ===================== */
+const mmList = document.getElementById('mmList');
+const mmReader = document.getElementById('mmReader');
+miniMap.forEach((item,i)=>{
+  const btn = document.createElement('button');
+  btn.innerHTML = `<span>${item.t}</span><span class="arrow">→</span>`;
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.mm-list button').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    mmReader.innerHTML = `<span class="tag">Topic ${i+1} / ${miniMap.length}</span><h4>${item.t}</h4><p>${item.body}</p>`;
+  });
+  mmList.appendChild(btn);
+});
+
+/* ===================== FLASH CARDS ===================== */
+const fcGrid = document.getElementById('fcGrid');
+flashcards.forEach((c,i)=>{
+  const card = document.createElement('div');
+  card.className = 'fc';
+  card.innerHTML = `
+    <div class="fc-inner">
+      <div class="fc-face fc-front"><span class="fc-idx">${i+1}</span><div class="q">${c.q}</div></div>
+      <div class="fc-face fc-back">${c.a}</div>
+    </div>`;
+  card.addEventListener('click', ()=> card.classList.toggle('flipped'));
+  fcGrid.appendChild(card);
+});
+
+/* ===================== QUIZ ===================== */
+const quizList = document.getElementById('quizList');
+const scoreVal = document.getElementById('scoreVal');
+const scoreTotal = document.getElementById('scoreTotal');
+let score = 0;
+let answered = 0;
+
+function buildQuiz(){
+  quizList.innerHTML = '';
+  score = 0; answered = 0;
+  scoreVal.textContent = '0';
+  scoreTotal.textContent = quizRaw.length;
+
+  quizRaw.forEach((item, idx)=>{
+    const options = shuffle([item.a, ...item.w]);
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.innerHTML = `<div class="qn">Question ${idx+1} / ${quizRaw.length}</div><p class="qtext">${item.q}</p><div class="opt-list"></div>`;
+    const optList = card.querySelector('.opt-list');
+    options.forEach(optText=>{
+      const optBtn = document.createElement('button');
+      optBtn.className = 'opt';
+      optBtn.textContent = optText;
+      optBtn.addEventListener('click', ()=>{
+        const allOpts = optList.querySelectorAll('.opt');
+        allOpts.forEach(o=>o.disabled = true);
+        if(optText === item.a){
+          optBtn.classList.add('correct');
+          score++;
+        } else {
+          optBtn.classList.add('wrong');
+          allOpts.forEach(o=>{ if(o.textContent === item.a) o.classList.add('correct'); });
+        }
+        answered++;
+        scoreVal.textContent = score;
+      });
+      optList.appendChild(optBtn);
+    });
+    quizList.appendChild(card);
+  });
+}
+document.getElementById('resetQuiz').addEventListener('click', buildQuiz);
+buildQuiz();
+</script>
+</body>
+</html>
